@@ -36,6 +36,6 @@ public class GraphView<T extends GraphLike, V> {
   }
 
   public int getWeight(V nodeFrom, V nodeTo) {
-    return this.graph.getWeight(this.getIndex(nodeFrom), this.getIndex(nodeTo));
+    return this.graph.getEdge(this.getIndex(nodeFrom), this.getIndex(nodeTo));
   }
 }

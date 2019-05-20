@@ -1,8 +1,9 @@
-package org.kaleeis_bears.ai.protocol;
+package org.kaleeis_bears.ai.le_havre_2019;
 
-import org.kaleeis_bears.ai.BaseIA;
 import org.kaleeis_bears.ai.logging.Logger;
+import org.kaleeis_bears.ai.protocol.Protocol;
 
+// TODO : Implémenter la gestion des messages du serveur dans ce fichier
 public class AI24hProtocol implements Protocol {
   private final BaseIA ai;
   private final Logger logger;
@@ -14,7 +15,6 @@ public class AI24hProtocol implements Protocol {
 
   @Override
   public String handle(String message) {
-    // TODO : Implémenter la gestion des messages du serveur ici
     this.logger.debug(this.ai + " - Message : " + message);
     return null;
   }

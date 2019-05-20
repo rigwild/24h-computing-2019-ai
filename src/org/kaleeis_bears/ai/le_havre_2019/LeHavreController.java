@@ -1,6 +1,5 @@
 package org.kaleeis_bears.ai.le_havre_2019;
 
-import org.kaleeis_bears.ai.BaseIA;
 import org.kaleeis_bears.ai.commandline.CommandLineDefinition;
 import org.kaleeis_bears.ai.commandline.arguments.ArgList;
 import org.kaleeis_bears.ai.commandline.arguments.OptionalArgDefinition;
@@ -10,16 +9,38 @@ import org.kaleeis_bears.ai.controllers.ControllerFactory;
 import org.kaleeis_bears.ai.controllers.NetworkController;
 import org.kaleeis_bears.ai.logging.ConsoleLogger;
 import org.kaleeis_bears.ai.logging.Logger;
-import org.kaleeis_bears.ai.protocol.AI24hProtocol;
 
 import java.lang.reflect.InvocationTargetException;
 
+// TODO : Trouver une façon d'instancier l'IA tout en gardant une certaine abstraction
 public class LeHavreController implements ControllerFactory<NetworkController> {
 
-  public static final String AI_NAME_DEFAULT = "AI_v00_EXAMPLE";
   public static final String TEAM_NAME = "Kaleeis Bears";
+
   public static final boolean DEBUG = false;
-  static private final String AI_PACKAGE_ROOT = "org.kaleeis_bears.ai.le_havre_2019.implementations";
+
+  public static final String AI_NAME_DEFAULT = "AI_v00_EXAMPLE";
+  public static final String AI_PACKAGE_ROOT = "org.kaleeis_bears.ai.le_havre_2019.implementations";
+
+  private static final CommandLineDefinition COMMAND_LINE_DEFINITION = new CommandLineDefinition(
+      "Epreuve reseau - 24H DUT INFO 24/05/19 - " + TEAM_NAME,
+      "./epreuve_reseau",
+      new OptionDefinition[]{
+          new OptionDefinition('d', "debug", "Active le mode déboguage.", null),
+          new OptionDefinition('n', "nom", "Change le nom de l'équipe. Par défaut : " + TEAM_NAME,
+              new ArgList(new RequiredArgDefinition[]{
+                  new RequiredArgDefinition<>("NOM", "Nom de l'équipe ", CommandLineDefinition::IDENTITY_VALIDATOR)
+              }, null)
+          )
+      },
+      new RequiredArgDefinition[]{
+          new RequiredArgDefinition<>("HÔTE", "Hôte du serveur du concours.", CommandLineDefinition::IDENTITY_VALIDATOR),
+          new RequiredArgDefinition<>("PORT", "Port du serveur du concours.", CommandLineDefinition.INTEGER_RANGE_VALIDATOR(1, 65536))
+      },
+      new OptionalArgDefinition[]{
+          new OptionalArgDefinition<>("VERSION_IA", AI_NAME_DEFAULT, "Version de l'IA à utiliser.", CommandLineDefinition::IDENTITY_VALIDATOR)
+      }
+  );
 
   static BaseIA instantiate(String name) throws IllegalAccessException, InstantiationException, NoSuchMethodException, ClassNotFoundException, InvocationTargetException {
     return (BaseIA) Class
@@ -35,25 +56,7 @@ public class LeHavreController implements ControllerFactory<NetworkController> {
 
   @Override
   public CommandLineDefinition getCommandLineDefinition() {
-    return new CommandLineDefinition(
-        "Epreuve reseau - 24H DUT INFO 24/05/19 - " + TEAM_NAME,
-        "./epreuve_reseau",
-        new OptionDefinition[]{
-            new OptionDefinition('d', "debug", "Active le mode déboguage.", null),
-            new OptionDefinition('n', "nom", "Change le nom de l'équipe. Par défaut : " + TEAM_NAME,
-                new ArgList(new RequiredArgDefinition[]{
-                    new RequiredArgDefinition<>("NOM", "Nom de l'équipe ", CommandLineDefinition::IDENTITY_VALIDATOR)
-                }, null)
-            )
-        },
-        new RequiredArgDefinition[]{
-            new RequiredArgDefinition<>("HÔTE", "Hôte du serveur du concours.", CommandLineDefinition::IDENTITY_VALIDATOR),
-            new RequiredArgDefinition<>("PORT", "Port du serveur du concours.", CommandLineDefinition.INTEGER_RANGE_VALIDATOR(1, 65536))
-        },
-        new OptionalArgDefinition[]{
-            new OptionalArgDefinition<>("VERSION_IA", AI_NAME_DEFAULT, "Version de l'IA à utiliser.", CommandLineDefinition::IDENTITY_VALIDATOR)
-        }
-    );
+    return COMMAND_LINE_DEFINITION;
   }
 
   @Override

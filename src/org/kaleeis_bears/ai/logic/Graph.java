@@ -4,9 +4,6 @@ import java.util.Iterator;
 
 public class Graph implements GraphLike {
 
-  public static final int EDGE_NONE = Integer.MAX_VALUE;
-  public static final int EDGE_IDENTITY = 0;
-
   private class Neighbourhood implements Iterator<Integer> {
     private final int from;
     private int to = -1;
@@ -59,14 +56,14 @@ public class Graph implements GraphLike {
   }
 
   public boolean exists(int nodeFrom, int nodeTo) {
-    return this.getWeight(nodeFrom, nodeTo) != EDGE_NONE;
+    return this.getEdge(nodeFrom, nodeTo) != GraphLike.EDGE_NONE;
   }
 
-  public int getWeight(int nodeFrom, int nodeTo) {
+  public int getEdge(int nodeFrom, int nodeTo) {
     return this.matrix[this.getIndex(nodeFrom, nodeTo)];
   }
 
-  public Graph setWeight(int nodeFrom, int nodeTo, int weight) {
+  public Graph setEdge(int nodeFrom, int nodeTo, int weight) {
     this.matrix[this.getIndex(nodeFrom, nodeTo)] = weight;
     return this;
   }

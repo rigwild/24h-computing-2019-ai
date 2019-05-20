@@ -3,52 +3,17 @@ package org.kaleeis_bears.ai.logic;
 import java.util.LinkedList;
 
 public class DistanceTree {
-  public static class Builder {
-    private final int[] tree, distances;
+  private final int[] tree;
+  public final int[] distances;
 
-    public final int from;
+  public final int from, visitedNodes, updatedNodes;
 
-    public Builder(int from, int order) {
-      this.from = from;
-      this.tree = new int[order];
-      this.distances = new int[order];
-      for (int i = 0; i < order; i++) {
-        this.tree[i] = -1;
-        this.distances[i] = Integer.MAX_VALUE;
-      }
-    }
-
-    public int getDistance(int node) {
-      return this.distances[node];
-    }
-
-    public Builder setDistance(int node, int distance) {
-      this.distances[node] = distance;
-      return this;
-    }
-
-    public Builder setFather(int node, int father) {
-      this.tree[node] = father;
-      return this;
-    }
-
-    public DistanceTree buildTree() {
-      return new DistanceTree(this.from, this.tree, this.distances);
-    }
-
-    public GraphPath buildPath(int to) {
-      return new GraphPath(this.buildTree().getPath(to), this.distances[to]);
-    }
-  }
-
-  private final int[] tree, distances;
-
-  public final int from;
-
-  public DistanceTree(int from, int[] tree, int[] distances) {
+  public DistanceTree(int from, int[] tree, int[] distances, int visitedNodes, int updatedNodes) {
     this.from = from;
     this.tree = tree;
     this.distances = distances;
+    this.visitedNodes = visitedNodes;
+    this.updatedNodes = updatedNodes;
   }
 
   private void ensureExists(int node) {
@@ -59,7 +24,7 @@ public class DistanceTree {
 
   public boolean canAccess(int to) {
     this.ensureExists(to);
-    return this.distances[to] == Integer.MAX_VALUE;
+    return this.distances[to] != GraphLike.EDGE_NONE;
   }
 
   public int getDistance(int to) {
