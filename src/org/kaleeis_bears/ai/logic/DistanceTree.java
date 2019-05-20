@@ -1,4 +1,4 @@
-package org.kaleeis_bears.ia_24h_2019.logic;
+package org.kaleeis_bears.ai.logic;
 
 import java.util.LinkedList;
 

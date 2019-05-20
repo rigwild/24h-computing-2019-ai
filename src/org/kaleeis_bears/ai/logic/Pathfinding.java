@@ -1,12 +1,12 @@
-package org.kaleeis_bears.ia_24h_2019.logic;
+package org.kaleeis_bears.ai.logic;
 
 public final class Pathfinding {
 
-  public static interface Heuristic {
+  public interface Heuristic {
     int compute(int from, int to);
   }
 
-  public static interface StopCriteria {
+  public interface StopCriteria {
     boolean check(int node);
   }
 

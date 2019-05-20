@@ -1,4 +1,4 @@
-package org.kaleeis_bears.ia_24h_2019.logic;
+package org.kaleeis_bears.ai.logic;
 
 import java.util.Iterator;
 
@@ -48,7 +48,7 @@ public class Graph implements GraphLike {
     if (nodeFrom < 0 || nodeFrom > this.order)
       throw new IndexOutOfBoundsException(
           "« nodeFrom » n'est pas un sommet de ce graphe (condition « 0 ≤ nodeFrom < ordre » non respectée).");
-    if (nodeFrom < 0 || nodeFrom > this.order)
+    if (nodeTo < 0 || nodeTo > this.order)
       throw new IndexOutOfBoundsException(
           "« nodeTo » n'est pas un sommet de ce graphe (condition « 0 ≤ nodeTo < ordre » non respectée).");
     return nodeFrom * this.order + nodeTo;
