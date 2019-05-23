@@ -13,6 +13,7 @@ import org.kaleeis_bears.ai.logging.Logger;
 import java.lang.reflect.InvocationTargetException;
 
 // TODO : Trouver une façon d'instancier l'IA tout en gardant une certaine abstraction
+@Deprecated
 public class LeHavreController implements ControllerFactory<NetworkController> {
 
   public static final String TEAM_NAME = "Kaleeis Bears";

@@ -4,6 +4,7 @@ import org.kaleeis_bears.ai.logging.Logger;
 import org.kaleeis_bears.ai.protocol.Protocol;
 
 // TODO : Implémenter la gestion des messages du serveur dans ce fichier
+@Deprecated
 public class AI24hProtocol implements Protocol {
   private final BaseIA ai;
   private final Logger logger;
