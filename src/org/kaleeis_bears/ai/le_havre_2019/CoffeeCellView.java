@@ -19,6 +19,14 @@ public class CoffeeCellView {
     this.id = map.getIndex(x, y);
   }
 
+  public CoffeeCellView(final Map map, char line, int column) {
+    this(map, line - 'A', column);
+  }
+
+  public CoffeeCellView(final Map map, String encoded) {
+    this(map, encoded.charAt(0), Integer.parseInt(encoded.substring(2)));
+  }
+
   public int get() {
     return this.map.getValue(this.id);
   }
@@ -98,5 +106,14 @@ public class CoffeeCellView {
   public CoffeeCellView set(int value) {
     this.map.setValue(this.id, value);
     return this;
+  }
+
+  public String encode() {
+    return String.format("%c:%d", this.map.getX(this.id) + 'A', this.map.getY(this.id));
+  }
+
+  @Override
+  public String toString() {
+    return String.format("(%d, %d)", this.map.getX(this.id), this.map.getY(this.id));
   }
 }

@@ -144,6 +144,14 @@ public class Map {
     return x * this.height + y;
   }
 
+  public int getX(int cell) {
+    return cell / this.height;
+  }
+
+  public int getY(int cell) {
+    return cell % this.height;
+  }
+
   public int getEuclideanDistance(int nodeFrom, int nodeTo) {
     final int dx = (nodeTo / this.height) - (nodeFrom / this.height);
     final int dy = (nodeTo % this.height) - (nodeFrom % this.height);

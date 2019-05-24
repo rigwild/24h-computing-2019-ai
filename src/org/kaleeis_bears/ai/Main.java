@@ -6,6 +6,7 @@ import org.kaleeis_bears.ai.controllers.ControllerFactory;
 import org.kaleeis_bears.ai.logging.ConsoleLogger;
 import org.kaleeis_bears.ai.logging.Logger;
 
+@Deprecated
 public class Main {
 
   static private final ControllerFactory<?> CONTROLLER_FACTORY = new org.kaleeis_bears.ai.le_havre_2019.LeHavreController();

@@ -8,11 +8,7 @@ import org.kaleeis_bears.ai.logging.CategoryLogger;
 import org.kaleeis_bears.ai.logging.ConsoleLogger;
 import org.kaleeis_bears.ai.logging.Logger;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class Main {
@@ -37,26 +33,15 @@ public class Main {
 
   static void run(Logger defaultLogger, String teamName, String host, int port) {
     final CategoryLogger networkLogger = new CategoryLogger(defaultLogger, "réseau");
-    final CategoryLogger aiLogger = new CategoryLogger(defaultLogger, "ai");
+//    final CategoryLogger aiLogger = new CategoryLogger(defaultLogger, "ai");
 
     networkLogger.debug("Tentative de connexion à " + host + ":" + port + "...");
 
-    try (
-        final Socket socket = new Socket(host, port);
-        final PrintWriter writer = new PrintWriter(socket.getOutputStream());
-        final BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()))
-    ) {
+    try {
 
-      networkLogger.debug("Connecté.");
+      final LeHavreProtocol protocol = new LeHavreProtocol(networkLogger, teamName == null ? TEAM_NAME : teamName, host, port);
 
-      // TODO : IMPLÉMENTER LE PROTOCOL RÉSEAU À PARTIR D'ICI
-
-      aiLogger.debug("[EXEMPLE] Je passe mon tour.");
-
-      // NE PAS OUBLIER
-      //writer.flush();
-
-      networkLogger.debug("Déconnecté gracieusement.");
+      protocol.run();
 
     } catch (UnknownHostException e) {
       networkLogger.exception("Hôte introuvable", e);
