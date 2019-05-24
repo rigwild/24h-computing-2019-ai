@@ -25,11 +25,6 @@ public class Main {
       "./epreuve_reseau",
       new OptionDefinition[]{
           new OptionDefinition('d', "debug", "Active le mode déboguage.", null)//,
-//          new OptionDefinition('n', "nom", "Change le nom de l'équipe. Par défaut : " + TEAM_NAME,
-//              new ArgList(new RequiredArgDefinition[]{
-//                  new RequiredArgDefinition<>("NOM", "Nom de l'équipe ", CommandLineDefinition::IDENTITY_VALIDATOR)
-//              }, null)
-//          )
       },
       new RequiredArgDefinition[]{
           new RequiredArgDefinition<>("HÔTE", "Hôte du serveur du concours.", CommandLineDefinition::IDENTITY_VALIDATOR),
@@ -53,7 +48,6 @@ public class Main {
     ) {
 
       networkLogger.debug("Connecté.");
-
 
       // TODO : IMPLÉMENTER LE PROTOCOL RÉSEAU À PARTIR D'ICI
 

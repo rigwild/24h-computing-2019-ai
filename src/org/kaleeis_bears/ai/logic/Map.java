@@ -193,6 +193,7 @@ public class Map {
     for (int wall : walls) set.add(wall);
     return this.toGraph((from, value) -> set.contains(value));
   }
+
   public GraphLike toGraph(WallCriteria wallDetection) {
     return new MapAsGraph(wallDetection);
   }
@@ -208,7 +209,7 @@ public class Map {
     return builder.toString();
   }
 
-  public String toString(int min, Character ...display) {
+  public String toString(int min, Character... display) {
     final StringBuilder builder = new StringBuilder();
     for (int y = 0; y < this.height; y++) {
       for (int x = 0; x < this.width; x++) {
