@@ -20,7 +20,7 @@ public class CoffeeCellView {
   }
 
   public CoffeeCellView(final Map map, char line, int column) {
-    this(map, line - 'A', column);
+    this(map, line - 'A', column - 1);
   }
 
   public CoffeeCellView(final Map map, String encoded) {
@@ -98,7 +98,7 @@ public class CoffeeCellView {
   }
 
   public CoffeeCellView add(final int value) {
-    return this.set(value & this.get());
+    return this.set(value | this.get());
   }
 
   public CoffeeCellView remove(CellData... types) {
@@ -106,7 +106,7 @@ public class CoffeeCellView {
   }
 
   public CoffeeCellView remove(final int value) {
-    return this.set((value | this.get()) | value);
+    return this.set((value | this.get()) ^ value);
   }
 
   public CoffeeCellView set(int value) {
@@ -115,7 +115,7 @@ public class CoffeeCellView {
   }
 
   public String encode() {
-    return String.format("%c:%d", this.map.getX(this.id) + 'A', this.map.getY(this.id));
+    return String.format("%c:%d", this.map.getX(this.id) + 'A', this.map.getY(this.id) + 1);
   }
 
   @Override

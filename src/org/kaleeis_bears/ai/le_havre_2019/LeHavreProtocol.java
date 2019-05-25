@@ -32,10 +32,13 @@ public class LeHavreProtocol {
       packet = new DatagramPacket(this.buffer, MAX_BUFFER_SIZE);
       socket.receive(packet);
     } while (!packet.getAddress().equals(this.remoteAdress));
-    return new String(packet.getData(), 0, packet.getLength());
+    final String message = new String(packet.getData(), 0, packet.getLength());
+    this.logger.debug("RECV : " + message);
+    return message;
   }
 
   private void send(String message) throws IOException {
+    this.logger.debug("SEND : " + message);
     final byte[] data = message.getBytes();
     socket.send(new DatagramPacket(data, data.length, this.remoteAdress, this.port));
   }
@@ -54,7 +57,6 @@ public class LeHavreProtocol {
     this.send(this.teamName);
     while (true) {
       final String message = this.receive();
-      this.logger.debug("SERVER : " + message);
       final Character separator = this.findSeparatorChar(message);
       final int idIndex = 2;
       final int commentIndex = separator == null ? -1 : message.indexOf(separator, idIndex + 1);
@@ -76,6 +78,8 @@ public class LeHavreProtocol {
           break;
         case "10":
           final CoffeeCellView action = this.world.play();
+          if (logger.isDebugEnabled())
+            System.out.println(this.world.toString());
           if (action == null)
             logger.debug("Pas de résultat de jeu trouvé, on n'envoie rien...");
           else {

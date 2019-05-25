@@ -1,7 +1,7 @@
 package org.kaleeis_bears.ai.le_havre_2019;
 
 public enum CellData {
-  NORTH(0),
+  NORTH(1),
   WEST(1 << 1),
   SOUTH(1 << 2),
   EAST(1 << 3),
@@ -12,7 +12,7 @@ public enum CellData {
   BEAN_OVER(1 << 7),
 
   WHITE_BEAN(1 << 7),
-  BLACK_BEAN(1 << 7 + 1 << 8);
+  BLACK_BEAN((1 << 7) + (1 << 8));
 
   public final int value;
 
