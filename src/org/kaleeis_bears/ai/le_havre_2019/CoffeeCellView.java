@@ -80,11 +80,17 @@ public class CoffeeCellView {
   }
 
   public boolean isWhiteBeam() {
-    return this.all(CellData.WHITE_BEAN.value);
+    return !this.all(CellData.BLACK_BEAN.value);
   }
 
   public boolean isBlackBeam() {
     return this.all(CellData.BLACK_BEAN.value);
+  }
+
+  public boolean isAligned(final CoffeeCellView other) {
+    final int Ax = this.map.getX(this.id), Ay = this.map.getY(this.id);
+    final int Bx = this.map.getX(other.id), By = this.map.getY(other.id);
+    return (Math.abs(Ax - Bx) == 0 || Math.abs(Ay - By) == 0);
   }
 
   public CoffeeCellView add(CellData... types) {

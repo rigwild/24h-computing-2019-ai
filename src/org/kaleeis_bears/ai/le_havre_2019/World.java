@@ -4,10 +4,12 @@ package org.kaleeis_bears.ai.le_havre_2019;
 import org.kaleeis_bears.ai.logic.Map;
 
 public class World {
-  private Map map;
+  private final Map map, heuristics;
+  private CoffeeCellView lastPlaced, pendingPlaced;
 
   public World(String chain) {
     map = new Map(10, 10);
+    heuristics = new Map(10, 10);
     final String[] lines = chain.split("\\|");
     int y, x;
     for (y = 0; y < lines.length; y++) {
@@ -27,11 +29,36 @@ public class World {
 
   public void place(CoffeeCellView cell, boolean white) {
     cell.add(white ? CellData.WHITE_BEAN.value : CellData.BLACK_BEAN.value);
+    if (white) {
+      this.lastPlaced = cell;
+      this.pendingPlaced = null;
+    } else
+      this.pendingPlaced = cell;
+  }
+
+  public void rejectPending() {
+    this.pendingPlaced = null;
   }
 
   public CoffeeCellView play() {
-    // TODO
-    return null;
+    if (this.pendingPlaced != null) {
+      this.lastPlaced = this.pendingPlaced;
+      this.pendingPlaced = null;
+    }
+    final CoffeeCellView[] cells = this.map
+        .stream(CoffeeCellView::new)
+        .filter(c ->
+            c.isParcel() && !c.isBeanOver() && (this.lastPlaced == null || this.lastPlaced.isAligned(c))
+        )
+        .peek(cell -> {
+          if (this.lastPlaced != null) {
+            final int value = this.heuristics.getValue(cell.id);
+            this.heuristics.setValue(cell.id, value + (10 - this.heuristics.getManhattanDistance(cell.id, this.lastPlaced.id)));
+          }
+        })
+        .sorted((a, b) -> this.heuristics.getValue(b.id) - this.heuristics.getValue(a.id))
+        .toArray(CoffeeCellView[]::new);
+    return cells.length == 0 ? null : cells[0];
   }
 
   @Override

@@ -54,54 +54,54 @@ public class LeHavreProtocol {
     this.send(this.teamName);
     while (true) {
       final String message = this.receive();
-//      this.logger.debug("SERVER : " + message);
+      this.logger.debug("SERVER : " + message);
       final Character separator = this.findSeparatorChar(message);
-      if (separator == null) {
-        this.logger.exception("PROTOCOL", "Pas de « : » dans le message è_é");
-      } else {
-        final int idIndex = message.indexOf(separator);
-        final int commentIndex = message.indexOf(separator, idIndex + 1);
-        final String
-            comment = commentIndex == -1 ? message.substring(idIndex) : message.substring(idIndex, commentIndex),
-            args = commentIndex == -1 ? null : message.substring(commentIndex + 1);
-        switch (message.substring(0, idIndex)) {
-          case "01":
-            final int mapHeaderIndex = message.indexOf('=');
-            if (mapHeaderIndex == -1)
-              logger.debug("Prêt. En attente de l'autre joueur...");
-            else {
-              logger.debug("Carte reçue. Chargement du monde...");
-              final String map = message.substring(mapHeaderIndex + 1);
-              this.world = new World(map);
-              if (logger.isDebugEnabled())
-                System.out.println(this.world.toString());
-            }
-            break;
-          case "10":
-            final CoffeeCellView action = this.world.play();
-            if (action == null)
-              logger.debug("Pas de résultat de jeu trouvé, on n'envoie rien...");
-            else
-              this.send(action.encode());
-            break;
+      final int idIndex = 2;
+      final int commentIndex = separator == null ? -1 : message.indexOf(separator, idIndex + 1);
+      final String
+          comment = commentIndex == -1 ? message.substring(idIndex) : message.substring(idIndex, commentIndex),
+          args = commentIndex == -1 ? null : message.substring(commentIndex + 1);
+      switch (message.substring(0, idIndex)) {
+        case "01":
+          final int mapHeaderIndex = message.indexOf('=');
+          if (mapHeaderIndex == -1)
+            logger.debug("Prêt. En attente de l'autre joueur...");
+          else {
+            logger.debug("Carte reçue. Chargement du monde...");
+            final String map = message.substring(mapHeaderIndex + 1);
+            this.world = new World(map);
+            if (logger.isDebugEnabled())
+              System.out.println(this.world.toString());
+          }
+          break;
+        case "10":
+          final CoffeeCellView action = this.world.play();
+          if (action == null)
+            logger.debug("Pas de résultat de jeu trouvé, on n'envoie rien...");
+          else {
+            this.send(action.encode());
+            this.world.place(action, false);
+            logger.debug("On joue en " + action + " (" + action.encode() + ").");
+          }
+          break;
 
-          case "20":
-            final CoffeeCellView opponentAction = this.world.get(args);
-            this.world.place(opponentAction, true);
-            logger.debug("Le joueur adverse a joué en " + opponentAction + ".");
-            return;
+        case "20":
+          final CoffeeCellView opponentAction = this.world.get(args);
+          this.world.place(opponentAction, true);
+          logger.debug("Le joueur adverse a joué en " + opponentAction + ".");
+          break;
 
-          case "21":
-            logger.debug("Oups... Notre coup n'a pas été accepté x(");
-            return;
-          case "22":
-            logger.debug("L'adversaire est nul, il n'a pas réussi à jouer :D");
-            return;
+        case "21":
+          logger.debug("Oups... Notre coup n'a pas été accepté x(");
+          this.world.rejectPending();
+          break;
+        case "22":
+          logger.debug("L'adversaire est nul, il n'a pas réussi à jouer :D");
+          break;
 
-          case "88":
-            logger.debug("Partie terminée.");
-            return;
-        }
+        case "88":
+          logger.debug("Partie terminée.");
+          return;
       }
     }
   }

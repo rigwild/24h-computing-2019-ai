@@ -10,6 +10,10 @@ public class Map {
     boolean test(int node, int value);
   }
 
+  public <T> Stream<T> stream(CellViewFactoy<T> factory) {
+    return IntStream.range(0, this.area).mapToObj(cell -> factory.build(this, cell));
+  }
+
   public class CellView {
     public final int id;
     public final boolean exists;
@@ -172,6 +176,10 @@ public class Map {
 
   public Stream<CellView> stream() {
     return IntStream.range(0, this.area).mapToObj(CellView::new);
+  }
+
+  public interface CellViewFactoy<T> {
+    T build(Map map, int cell);
   }
 
   public int getValue(int cell) {
