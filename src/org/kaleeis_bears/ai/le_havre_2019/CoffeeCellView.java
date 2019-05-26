@@ -63,7 +63,7 @@ public class CoffeeCellView {
     return this.all(CellData.EAST.value);
   }
 
-  public boolean isParcel() {
+  public boolean isPlot() {
     return !this.any(CellData.FOREST.value + CellData.SEA.value);
   }
 
